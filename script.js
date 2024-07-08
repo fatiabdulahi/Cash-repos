@@ -19,9 +19,9 @@ const cashDrawerDisplay = document.getElementById('cash-drawer-display');
 
 const formatResults = (status, change) => {
   displayChangeDue.innerHTML = `<p>Status: ${status}</p>`;
-  change.map(
-    money => (displayChangeDue.innerHTML += `<p>${money[0]}: $${money[1]}</p>`)
-  );
+  change.map((money) => {
+    displayChangeDue.innerHTML += `<p>${money[0]}: $${money[1]}</p>`;
+  });
 };
 
 const checkCashRegister = () => {
@@ -46,18 +46,18 @@ const checkCashRegister = () => {
     };
     // Update cid if change is passed in
     if (change) {
-      change.forEach(changeArr => {
-        const targetArr = cid.find(cidArr => cidArr[0] === changeArr[0]);
+      change.forEach((changeArr) => {
+        const targetArr = cid.find((cidArr) => cidArr[0] === changeArr[0]);
         targetArr[1] = parseFloat((targetArr[1] - changeArr[1]).toFixed(2));
       });
     }
-  
-    cash.value = '';
-    priceScreen.textContent = `Total: $${price}`;
-    cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
-      ${cid
-      .map(money => `<p>${currencyNameMap[money[0]]}: $${money[1]}</p>`)
-      .join('')}
+
+  cash.value = '';
+  priceScreen.textContent = `Total: $${price}`;
+  cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
+  ${cid
+    .map((money) => `<p>${currencyNameMap[money[0]]}: $${money[1]}</p>`)
+    .join('')}
     `;
   };
 
@@ -73,22 +73,23 @@ const checkCashRegister = () => {
   const result = { status: 'OPEN', change: [] };
   const totalCID = parseFloat(
     cid
-      .map(total => total[1])
+      .map((total) => total[1])
       .reduce((prev, curr) => (prev + curr))
       .toFixed(2),
   );
 
   if (totalCID < changeDue) {
-    return (displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>');
+    displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>';
+    return;
   }
-
+  
   if (totalCID === changeDue) {
     result.status = 'CLOSED';
   }
 
   for (let i = 0; i <= reversedCid.length; i + 1) {
     if (changeDue >= denominations[i] && changeDue > 0) {
-      let count = 0;
+      const count = 0;
       let total = reversedCid[i][1];
       while (total > 0 && changeDue >= denominations[i]) {
         total -= denominations[i];
@@ -101,10 +102,11 @@ const checkCashRegister = () => {
     }
   }
   if (changeDue > 0) {
-    return (displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>');
+    (displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>');
+    return;
   }
 
-formatResults(result.status, result.change);
+  formatResults(result.status, result.change);
   updateUI(result.change);
 };
 
