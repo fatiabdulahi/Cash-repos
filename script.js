@@ -21,6 +21,7 @@ const formatResults = (status, change) => {
   displayChangeDue.innerHTML = `<p>Status: ${status}</p>`;
   change.map((money) => {
     displayChangeDue.innerHTML += `<p>${money[0]}: $${money[1]}</p>`;
+    return;
   });
 };
 
@@ -30,7 +31,6 @@ const checkCashRegister = () => {
     cash.value = '';
     return;
   }
-
 
   const updateUI = (change) => {
     const currencyNameMap = {
@@ -52,9 +52,9 @@ const checkCashRegister = () => {
       });
     }
 
-  cash.value = '';
-  priceScreen.textContent = `Total: $${price}`;
-  cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
+    cash.value = '';
+    priceScreen.textContent = `Total: $${price}`;
+    cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
   ${cid
     .map((money) => `<p>${currencyNameMap[money[0]]}: $${money[1]}</p>`)
     .join('')}
@@ -82,7 +82,7 @@ const checkCashRegister = () => {
     displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>';
     return;
   }
-  
+
   if (totalCID === changeDue) {
     result.status = 'CLOSED';
   }
@@ -94,7 +94,7 @@ const checkCashRegister = () => {
       while (total > 0 && changeDue >= denominations[i]) {
         total -= denominations[i];
         changeDue = parseFloat((changeDue -= denominations[i]).toFixed(2));
-        count + 1;
+        count += 1;
       }
       if (count > 0) {
         result.change.push([reversedCid[i][0], count * denominations[i]]);
@@ -124,5 +124,3 @@ cash.addEventListener('keydown', (e) => {
     checkResults();
   }
 });
-
-updateUI();
