@@ -22,7 +22,6 @@ const formatResults = (status, change) => {
   change.map(
     money => (displayChangeDue.innerHTML += `<p>${money[0]}: $${money[1]}</p>`)
   );
-
 };
 
 const checkCashRegister = () => {
@@ -31,6 +30,36 @@ const checkCashRegister = () => {
     cash.value = '';
     return;
   }
+
+
+  const updateUI = (change) => {
+    const currencyNameMap = {
+      PENNY: 'Pennies',
+      NICKEL: 'Nickels',
+      DIME: 'Dimes',
+      QUARTER: 'Quarters',
+      ONE: 'Ones',
+      FIVE: 'Fives',
+      TEN: 'Tens',
+      TWENTY: 'Twenties',
+      'ONE HUNDRED': 'Hundreds',
+    };
+    // Update cid if change is passed in
+    if (change) {
+      change.forEach(changeArr => {
+        const targetArr = cid.find(cidArr => cidArr[0] === changeArr[0]);
+        targetArr[1] = parseFloat((targetArr[1] - changeArr[1]).toFixed(2));
+      });
+    }
+  
+    cash.value = '';
+    priceScreen.textContent = `Total: $${price}`;
+    cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
+      ${cid
+      .map(money => `<p>${currencyNameMap[money[0]]}: $${money[1]}</p>`)
+      .join('')}
+    `;
+  };
 
   if (Number(cash.value) === price) {
     displayChangeDue.innerHTML = '<p>No change due - customer paid with exact cash</p>';
@@ -57,7 +86,7 @@ const checkCashRegister = () => {
     result.status = 'CLOSED';
   }
 
-  for (let i = 0; i <= reversedCid.length; i+1) {
+  for (let i = 0; i <= reversedCid.length; i + 1) {
     if (changeDue >= denominations[i] && changeDue > 0) {
       let count = 0;
       let total = reversedCid[i][1];
@@ -75,7 +104,7 @@ const checkCashRegister = () => {
     return (displayChangeDue.innerHTML = '<p>Status: INSUFFICIENT_FUNDS</p>');
   }
 
-  formatResults(result.status, result.change);
+formatResults(result.status, result.change);
   updateUI(result.change);
 };
 
@@ -84,35 +113,6 @@ const checkResults = () => {
     return;
   }
   checkCashRegister();
-};
-
-const updateUI = (change) => {
-  const currencyNameMap = {
-    PENNY: 'Pennies',
-    NICKEL: 'Nickels',
-    DIME: 'Dimes',
-    QUARTER: 'Quarters',
-    ONE: 'Ones',
-    FIVE: 'Fives',
-    TEN: 'Tens',
-    TWENTY: 'Twenties',
-    'ONE HUNDRED': 'Hundreds',
-  };
-  // Update cid if change is passed in
-  if (change) {
-    change.forEach(changeArr => {
-      const targetArr = cid.find(cidArr => cidArr[0] === changeArr[0]);
-      targetArr[1] = parseFloat((targetArr[1] - changeArr[1]).toFixed(2));
-    });
-  }
-
-  cash.value = '';
-  priceScreen.textContent = `Total: $${price}`;
-  cashDrawerDisplay.innerHTML = `<p><strong>Change in drawer:</strong></p>
-    ${cid
-    .map(money => `<p>${currencyNameMap[money[0]]}: $${money[1]}</p>`)
-    .join('')}
-  `;
 };
 
 purchaseBtn.addEventListener('click', checkResults);
