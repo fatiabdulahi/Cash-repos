@@ -21,7 +21,7 @@ const formatResults = (status, change) => {
   displayChangeDue.innerHTML = `<p>Status: ${status}</p>`;
   change.map((money) => {
     displayChangeDue.innerHTML += `<p>${money[0]}: $${money[1]}</p>`;
-    return null;
+    return ;
   });
 };
 
@@ -87,7 +87,7 @@ const checkCashRegister = () => {
     result.status = 'CLOSED';
   }
 
-  for (let i = 0; i <= reversedCid.length; i + 1) {
+  for (let i = 0; i <= reversedCid.length; i++) {
     if (changeDue >= denominations[i] && changeDue > 0) {
       let count = 0;
       let total = reversedCid[i][1];
