@@ -87,7 +87,7 @@ const checkCashRegister = () => {
     result.status = 'CLOSED';
   }
 
-  for (let i = 0; i <= reversedCid.length; i++) {
+  for (let i = 0; i <= reversedCid.length; i += 1) {
     if (changeDue >= denominations[i] && changeDue > 0) {
       let count = 0;
       let total = reversedCid[i][1];
