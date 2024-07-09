@@ -87,6 +87,7 @@ const checkCashRegister = () => {
     result.status = 'CLOSED';
   }
 
+// eslint-disable-next-line no-plusplus
   for (let i = 0; i <= reversedCid.length; ++i) {
     if (changeDue >= denominations[i] && changeDue > 0) {
       let count = 0;
